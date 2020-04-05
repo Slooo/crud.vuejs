@@ -14,7 +14,6 @@
     },
     methods: {
       onSubmit() {
-        console.log('Submit', this.title)
         if (this.title.trim()) {
           const newTodo = {
             id: Date.now(),

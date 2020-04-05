@@ -21,7 +21,6 @@
     },
     methods: {
       removeTodo(id) {
-        console.log('ID', id)
         this.$emit('removeTodo', id)
       }
     }

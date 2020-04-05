@@ -10,8 +10,8 @@
     </select>
     <Loader v-if="loading"/>
     <TodoList
-      v-else-if="filteredTodos.length"
-      v-bind:todos="filteredTodos"
+      v-else-if="todosCount"
+      :todos="filteredTodos"
       @removeTodo="removeTodo"
     />
     <p v-else>No todos!</p>
@@ -31,11 +31,10 @@
       return {
         todos: [],
         filter: [],
-        loading: true
+        loading: false
       }
     },
     mounted() {
-      console.log('THE', this.fetchTodos, mapActions(['fetchTodos']))
       this.fetchTodos()
     },
     components: {
@@ -47,32 +46,23 @@
     //   }
     // },
     computed: {
+      ...mapGetters(['allTodos', 'todosCount', 'filteredTodos']),
       filteredTodos() {
         if (this.filter === 'all') {
-          return mapGetters(['allTodos'])
+          return this.allTodos
         }
 
         if (this.filter === 'completed') {
-          return mapGetters(['allTodos']).filter(t => t.completed)
+          return this.allTodos.filter(t => t.completed)
         }
 
         if (this.filter === 'notCompleted') {
-          return mapGetters(['allTodos']).filter(t => !t.completed)
+          return this.allTodos.filter(t => !t.completed)
         }
 
-        return mapGetters(['allTodos'])
+        return this.allTodos
       }
     },
-    methods: {
-      fetchTodos() {
-        return mapActions(['fetchTodos'])
-      },
-      removeTodo(id) {
-        this.todos = this.todos.filter(t => t.id !== id)
-      },
-      addTodo(todo) {
-        this.todos.push(todo)
-      }
-    }
+    methods: mapActions(['fetchTodos', 'removeTodo', 'addTodo'])
   }
 </script>
